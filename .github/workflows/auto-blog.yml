@@ -35,6 +35,7 @@ jobs:
         run: |
           node --check scripts/generate_blog.js
           npm run sync-blog
+          npm run check-seo
 
       - name: Open review pull request
         uses: peter-evans/create-pull-request@v7
