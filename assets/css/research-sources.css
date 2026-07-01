@@ -1,0 +1,6 @@
+.post-sources{margin:4.5rem 0 1rem;padding-top:2rem;border-top:1px solid var(--line)}
+.post-sources h2{font-size:1.8rem;margin:0 0 1rem}
+.post-sources ul{padding:0;list-style:none}
+.post-sources li{margin:.8rem 0}
+.post-sources a{font-weight:600;text-decoration:underline;text-underline-offset:.2em}
+.post-sources span{display:block;color:var(--sage);font-size:.85rem}

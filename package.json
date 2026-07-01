@@ -1,0 +1,1 @@
+{"name":"snout-n-about-photography","version":"1.0.0","private":true,"scripts":{"generate-blog":"node scripts/generate_blog.js","sync-blog":"node scripts/generate_blog.js --sync-only"},"dependencies":{"openai":"^6.0.0"}}
