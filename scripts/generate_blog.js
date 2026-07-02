@@ -1,8 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// Change this once the production custom domain is connected.
-const BASE_URL = "https://charlieakan.github.io/sna-photo-site";
+const BASE_URL = (process.env.SITE_URL || "https://charlieakan.github.io/sna-photo-site").replace(/\/$/, "");
 const ROOT = path.join(__dirname, "..");
 const BLOG_DIR = path.join(ROOT, "blog");
 const REQUIRED = [
@@ -15,6 +14,33 @@ const REQUIRED = [
   "content",
   "sources",
 ];
+const POST_SCHEMA = {
+  type: "object",
+  additionalProperties: false,
+  required: REQUIRED,
+  properties: {
+    title: { type: "string" },
+    date: { type: "string" },
+    isoDate: { type: "string" },
+    excerpt: { type: "string" },
+    slug: { type: "string" },
+    tags: { type: "array", items: { type: "string" } },
+    content: { type: "string" },
+    sources: {
+      type: "array",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["title", "publisher", "url"],
+        properties: {
+          title: { type: "string" },
+          publisher: { type: "string" },
+          url: { type: "string" },
+        },
+      },
+    },
+  },
+};
 
 function escapeHtml(value = "") {
   return String(value).replace(
@@ -34,6 +60,12 @@ function validatePost(post) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug))
     throw new Error("slug must be lowercase and URL safe");
   if (!Array.isArray(post.tags)) throw new Error("tags must be an array");
+  if (post.title.length < 25 || post.title.length > 65)
+    throw new Error("Title must be between 25 and 65 characters");
+  if (post.excerpt.length < 80 || post.excerpt.length > 160)
+    throw new Error("Excerpt must be between 80 and 160 characters");
+  if (post.tags.length < 1 || post.tags.some((tag) => typeof tag !== "string" || !tag.trim()))
+    throw new Error("Post needs at least one valid tag");
   if (post.content.includes("—")) throw new Error("Post contains an em dash");
   if (!Array.isArray(post.sources) || post.sources.length < 2)
     throw new Error("Post must include at least two research sources");
@@ -55,6 +87,26 @@ function validatePost(post) {
     throw new Error("Research must use at least two independent domains");
   if (/<script|<style|\son\w+=/i.test(post.content))
     throw new Error("Unsafe HTML found in generated content");
+  const allowedTags = new Set(["h2", "h3", "p", "ul", "li", "a", "strong", "em"]);
+  for (const match of post.content.matchAll(/<\/?([a-z0-9]+)\b[^>]*>/gi))
+    if (!allowedTags.has(match[1].toLowerCase()))
+      throw new Error(`Unsupported HTML tag in content: ${match[1]}`);
+  for (const match of post.content.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi)) {
+    let link;
+    try {
+      link = new URL(match[1]);
+    } catch {
+      throw new Error(`Article contains an invalid link: ${match[1]}`);
+    }
+    if (link.protocol !== "https:")
+      throw new Error(`Article links must use HTTPS: ${match[1]}`);
+  }
+  const citedSources = post.sources.filter((source) => post.content.includes(source.url));
+  if (citedSources.length < 2)
+    throw new Error("Article must cite at least two listed sources in the body");
+  const plainWordCount = post.content.replace(/<[^>]+>/g, " ").trim().split(/\s+/).length;
+  if (plainWordCount < 600)
+    throw new Error(`Article is too short (${plainWordCount} words; minimum is 600)`);
   const robotic = [
     "in conclusion",
     "delve",
@@ -157,8 +209,16 @@ async function generateBlog() {
       .map((post) => post.title)
       .join("; ") || "None yet";
   const response = await client.responses.create({
-    model: process.env.OPENAI_MODEL || "gpt-5",
+    model: process.env.OPENAI_MODEL || "gpt-5.4",
     tools: [{ type: "web_search" }],
+    text: {
+      format: {
+        type: "json_schema",
+        name: "pet_photography_blog_post",
+        strict: true,
+        schema: POST_SCHEMA,
+      },
+    },
     instructions: `You are the writer and careful fact-checker for Snout 'n About Photography, a warm pet photography studio in Marietta, Georgia.
 
 RESEARCH FIRST:
@@ -180,8 +240,8 @@ OUTPUT:
 Return only valid JSON with title, date, isoDate, excerpt, slug, tags (array), content (semantic HTML using h2, h3, p, ul, li, and inline a tags only), and sources. Sources must be an array of objects with title, publisher, and the direct HTTPS url. Cite factual claims naturally with links in the article. End with a warm invitation to book, but do not invent an offer or urgency.`,
     input: `Research and write one useful article. Choose one of these directions: ${topics.join("; ")}. Avoid duplicating these existing posts: ${existing}. Today's date is ${new Date().toISOString().slice(0, 10)}.`,
   });
-  const raw = response.output_text.replace(/^```json\s*|\s*```$/g, "");
-  const post = validatePost(JSON.parse(raw));
+  if (!response.output_text) throw new Error("OpenAI returned no article content");
+  const post = validatePost(JSON.parse(response.output_text));
   fs.mkdirSync(BLOG_DIR, { recursive: true });
   const template = fs.readFileSync(
     path.join(ROOT, "blog-template.html"),

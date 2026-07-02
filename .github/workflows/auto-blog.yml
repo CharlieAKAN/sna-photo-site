@@ -9,6 +9,10 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: researched-pet-blog
+  cancel-in-progress: false
+
 jobs:
   draft:
     runs-on: ubuntu-latest
@@ -16,26 +20,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Check blog automation secret
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "OPENAI_API_KEY is not configured in repository Actions secrets."
+            exit 1
+          fi
 
       - name: Research and generate one post
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: gpt-5
-        run: npm run generate-blog
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.4' }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://charlieakan.github.io/sna-photo-site' }}
+        run: pnpm run generate-blog
 
       - name: Validate generated site files
-        run: |
-          node --check scripts/generate_blog.js
-          npm run sync-blog
-          npm run check-seo
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://charlieakan.github.io/sna-photo-site' }}
+        run: pnpm run validate
 
       - name: Open review pull request
         uses: peter-evans/create-pull-request@v7
