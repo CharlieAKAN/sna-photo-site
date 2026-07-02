@@ -29,7 +29,7 @@
     <meta name="twitter:description" content="Expressive, cinematic pet photography in Marietta, Georgia." />
     <meta name="twitter:image" content="https://charlieakan.github.io/sna-photo-site/assets/images/new/680818044_122107018856735434_4454822386258834117_n.webp" />
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":["LocalBusiness","ProfessionalService"],"@id":"https://charlieakan.github.io/sna-photo-site/#business","name":"Snout ’n About Photography","url":"https://charlieakan.github.io/sna-photo-site/","image":"https://charlieakan.github.io/sna-photo-site/assets/images/new/680818044_122107018856735434_4454822386258834117_n.webp","description":"Expressive, cinematic pet photography for dogs, cats, and beloved companions in Marietta, Georgia.","address":{"@type":"PostalAddress","streetAddress":"3421 Pawnee Trail SW","addressLocality":"Marietta","addressRegion":"GA","postalCode":"30060","addressCountry":"US"},"areaServed":[{"@type":"City","name":"Marietta"},{"@type":"AdministrativeArea","name":"Atlanta metropolitan area"}],"sameAs":["https://www.instagram.com/snoutnabout_photo/","https://www.facebook.com/profile.php?id=61572063043621"]}
+      {"@context":"https://schema.org","@type":["LocalBusiness","ProfessionalService"],"@id":"https://charlieakan.github.io/sna-photo-site/#business","name":"Snout ’n About Photography","url":"https://charlieakan.github.io/sna-photo-site/","logo":"https://charlieakan.github.io/sna-photo-site/assets/images/brand/sna-logo-black.webp","image":"https://charlieakan.github.io/sna-photo-site/assets/images/new/680818044_122107018856735434_4454822386258834117_n.webp","description":"Expressive, cinematic pet photography for dogs, cats, and beloved companions in Marietta, Georgia.","address":{"@type":"PostalAddress","streetAddress":"3421 Pawnee Trail SW","addressLocality":"Marietta","addressRegion":"GA","postalCode":"30060","addressCountry":"US"},"areaServed":[{"@type":"City","name":"Marietta"},{"@type":"AdministrativeArea","name":"Atlanta metropolitan area"}],"sameAs":["https://www.instagram.com/snoutnabout_photo/","https://www.facebook.com/profile.php?id=61572063043621"]}
     </script>
     <script type="application/ld+json">
       {"@context":"https://schema.org","@type":"WebSite","@id":"https://charlieakan.github.io/sna-photo-site/#website","name":"Snout ’n About Photography","url":"https://charlieakan.github.io/sna-photo-site/","publisher":{"@id":"https://charlieakan.github.io/sna-photo-site/#business"}}
@@ -37,14 +37,13 @@
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/photo-home.css" />
     <link rel="stylesheet" href="assets/css/photo-home-fix.css" />
+    <link rel="stylesheet" href="assets/css/watercolor.css" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
     <header class="site-header">
       <nav class="nav wrap">
-        <a class="brand" href="index.html"
-          >Snout ’n About<small>Photography</small></a
-        ><button
+        <a class="brand" href="index.html"><img class="brand-logo brand-logo--header" src="assets/images/brand/sna-logo-black.webp" width="826" height="324" alt="Snout ’n About Photography" /></a><button
           class="nav-toggle"
           aria-expanded="false"
           aria-controls="nav-links"
@@ -91,7 +90,7 @@
           ><span>Husband-and-wife team</span>
         </div>
       </div>
-      <section class="section portfolio-intro">
+      <section class="section portfolio-intro wc-stage wc-stage--paired">
         <div class="wrap">
           <p class="eyebrow">Selected work</p>
           <h2>Portraits with a pulse.</h2>
@@ -138,7 +137,7 @@
           />
         </figure>
       </section>
-      <section class="section">
+      <section class="section wc-stage wc-stage--warm wc-stage--soft">
         <div class="wrap split">
           <div>
             <p class="eyebrow">No perfect sit required</p>
@@ -172,7 +171,7 @@
         />
         <blockquote>“Every face has a story worth keeping.”</blockquote>
       </section>
-      <section class="section">
+      <section class="section wc-stage wc-stage--cool wc-divider-top">
         <div class="wrap">
           <div class="section-head">
             <div>
@@ -211,13 +210,23 @@
           </div>
         </div>
       </section>
-      <section class="section" style="background: #e9e1d4">
-        <div class="wrap">
-          <blockquote class="quote">
-            “The photos of Zeus captured him exactly as we know him. The whole
-            experience felt patient, easy, and genuinely fun.”<cite
-              >Zeus’s owner · Mike S.</cite
-            >
+      <section class="section testimonial-section wc-stage wc-stage--paired wc-stage--soft">
+        <div class="wrap testimonial-layout">
+          <figure class="testimonial-artwork">
+            <img
+              src="assets/images/testimonials/zeus-artwork.webp"
+              width="1200"
+              height="1600"
+              alt="Framed watercolor-style portrait artwork featuring Zeus"
+              loading="lazy"
+            />
+            <figcaption>Zeus’s finished portrait artwork</figcaption>
+          </figure>
+          <blockquote class="quote testimonial-quote">
+            <span aria-hidden="true" class="testimonial-mark">“</span>
+            <span>The photos of Zeus captured him exactly as we know him. The whole
+            experience felt patient, easy, and genuinely fun.</span>
+            <cite>Zeus’s owner · Mike S.</cite>
           </blockquote>
         </div>
       </section>
@@ -241,9 +250,7 @@
       <div class="wrap">
         <div class="footer-grid">
           <div>
-            <a class="brand" href="index.html"
-              >Snout ’n About<small>Photography</small></a
-            >
+            <a class="brand" href="index.html"><img class="brand-logo brand-logo--footer" src="assets/images/brand/sna-logo-white.webp" width="837" height="338" alt="Snout ’n About Photography" /></a>
             <p>Cinematic pet portraits in Marietta and the Atlanta area.</p>
             <div class="social-links"><a href="https://www.instagram.com/snoutnabout_photo/">Instagram</a><span aria-hidden="true">·</span><a href="https://www.facebook.com/profile.php?id=61572063043621">Facebook</a></div>
           </div>
