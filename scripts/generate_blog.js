@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const BASE_URL = (process.env.SITE_URL || "https://charlieakan.github.io/sna-photo-site").replace(/\/$/, "");
+const BASE_URL = (process.env.SITE_URL || "https://sna-photo.com").replace(/\/$/, "");
 const ROOT = path.join(__dirname, "..");
 const BLOG_DIR = path.join(ROOT, "blog");
 const REQUIRED = [

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const SITE_URL = (process.env.SITE_URL || 'https://charlieakan.github.io/sna-photo-site').replace(/\/$/, '');
+const SITE_URL = (process.env.SITE_URL || 'https://sna-photo.com').replace(/\/$/, '');
 const sitemap = fs.readFileSync('sitemap.xml', 'utf8');
 const sitemapUrls = new Set([...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]));
 
