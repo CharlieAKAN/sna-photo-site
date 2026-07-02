@@ -142,14 +142,21 @@ function readPosts() {
 function syncIndex() {
   const posts = readPosts();
   const cards = posts
-    .map(
-      (post) => `<article class="blog-card">
-  <a class="journal-card-image" href="blog/${escapeHtml(post.slug)}/" aria-label="Read ${escapeHtml(post.title)}"><img src="assets/images/new/680818044_122107018856735434_4454822386258834117_n.webp" alt="" width="1440" height="810" loading="lazy"></a>
+    .map((post, index) =>
+      index === 0
+        ? `<article class="blog-card blog-card--featured">
+  <a class="journal-card-image" href="blog/${escapeHtml(post.slug)}/" aria-label="Read ${escapeHtml(post.title)}"><img src="assets/images/pet-12.webp" alt="Snout ’n About Photography watercolor logo" width="1500" height="1000" loading="lazy"></a>
   <div class="journal-card-body">
     <span class="blog-date"><time datetime="${escapeHtml(post.isoDate)}">${escapeHtml(post.date)}</time></span>
     <h3>${escapeHtml(post.title)}</h3>
     <p>${escapeHtml(post.excerpt)}</p>
     <a class="link" href="blog/${escapeHtml(post.slug)}/">Read article <span aria-hidden="true">→</span></a>
+  </div>
+</article>`
+        : `<article class="blog-card blog-card--archive">
+  <div class="journal-card-body">
+    <span class="blog-date"><time datetime="${escapeHtml(post.isoDate)}">${escapeHtml(post.date)}</time></span>
+    <h3><a href="blog/${escapeHtml(post.slug)}/">${escapeHtml(post.title)}</a></h3>
   </div>
 </article>`,
     )
