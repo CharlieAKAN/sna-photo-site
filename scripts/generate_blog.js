@@ -237,11 +237,42 @@ VOICE:
 - Do not stuff keywords. Use only genuinely relevant phrases such as Marietta pet photography, Atlanta area pet photographer, dog photography in Marietta, senior pet portraits, or pet photo session.
 
 OUTPUT:
-Return only valid JSON with title, date, isoDate, excerpt, slug, tags (array), content (semantic HTML using h2, h3, p, ul, li, and inline a tags only), and sources. Sources must be an array of objects with title, publisher, and the direct HTTPS url. Cite factual claims naturally with links in the article. End with a warm invitation to book, but do not invent an offer or urgency.`,
+Return only valid JSON with title, date, isoDate, excerpt, slug, tags (array), content (semantic HTML using h2, h3, p, ul, li, and inline a tags only), and sources.
+- The title must be 25-65 characters, including spaces.
+- The excerpt must be 80-160 characters, including spaces.
+- The article body must contain at least 600 words.
+- Sources must be an array of objects with title, publisher, and the direct HTTPS url.
+- Cite at least two of the listed source URLs naturally in the article body.
+- End with a warm invitation to book, but do not invent an offer or urgency.`,
     input: `Research and write one useful article. Choose one of these directions: ${topics.join("; ")}. Avoid duplicating these existing posts: ${existing}. Today's date is ${new Date().toISOString().slice(0, 10)}.`,
   });
-  if (!response.output_text) throw new Error("OpenAI returned no article content");
-  const post = validatePost(JSON.parse(response.output_text));
+  let currentResponse = response;
+  let post;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      if (!currentResponse.output_text)
+        throw new Error("OpenAI returned no article content");
+      post = validatePost(JSON.parse(currentResponse.output_text));
+      break;
+    } catch (error) {
+      if (attempt === 3)
+        throw new Error(`Draft failed validation after 3 attempts: ${error.message}`);
+      console.warn(`Draft validation attempt ${attempt} failed: ${error.message}`);
+      currentResponse = await client.responses.create({
+        model: process.env.OPENAI_MODEL || "gpt-5.4",
+        previous_response_id: currentResponse.id,
+        text: {
+          format: {
+            type: "json_schema",
+            name: "pet_photography_blog_post",
+            strict: true,
+            schema: POST_SCHEMA,
+          },
+        },
+        input: `Return a corrected complete JSON article. The previous draft failed this requirement: ${error.message}. Preserve well-supported research and citations while fixing every validation issue.`,
+      });
+    }
+  }
   fs.mkdirSync(BLOG_DIR, { recursive: true });
   const template = fs.readFileSync(
     path.join(ROOT, "blog-template.html"),
