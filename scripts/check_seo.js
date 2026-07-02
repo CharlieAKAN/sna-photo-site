@@ -2,10 +2,13 @@ const fs = require('fs');
 
 const pages = [
   'index.html',
-  'gallery.html',
-  'about.html',
-  'blog.html',
-  ...fs.readdirSync('blog').filter(file => file.endsWith('.html')).map(file => `blog/${file}`),
+  'gallery/index.html',
+  'sessions/index.html',
+  'about/index.html',
+  'blog/index.html',
+  ...fs.readdirSync('blog', { withFileTypes: true })
+    .filter(entry => entry.isDirectory() && fs.existsSync(`blog/${entry.name}/index.html`))
+    .map(entry => `blog/${entry.name}/index.html`),
 ];
 
 let failures = 0;

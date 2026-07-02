@@ -78,6 +78,7 @@
 .cinema-grid figure {
   margin: 0;
   overflow: hidden;
+  border-radius: var(--radius);
 }
 .cinema-grid .cinema-wide {
   grid-column: span 2;

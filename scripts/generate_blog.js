@@ -72,9 +72,9 @@ function readPosts() {
   if (!fs.existsSync(BLOG_DIR)) return [];
   return fs
     .readdirSync(BLOG_DIR)
-    .filter((file) => file.endsWith(".html"))
+    .filter((file) => fs.statSync(path.join(BLOG_DIR, file)).isDirectory() && fs.existsSync(path.join(BLOG_DIR, file, "index.html")))
     .map((file) => {
-      const html = fs.readFileSync(path.join(BLOG_DIR, file), "utf8");
+      const html = fs.readFileSync(path.join(BLOG_DIR, file, "index.html"), "utf8");
       const match = html.match(/<!-- METADATA: (.*?) -->/);
       if (!match) return null;
       try {
@@ -92,22 +92,22 @@ function syncIndex() {
   const cards = posts
     .map(
       (post) => `<article class="blog-card">
-  <a class="journal-card-image" href="blog/${escapeHtml(post.slug)}.html" aria-label="Read ${escapeHtml(post.title)}"><img src="assets/images/new/680818044_122107018856735434_4454822386258834117_n.webp" alt="" width="1440" height="810" loading="lazy"></a>
+  <a class="journal-card-image" href="blog/${escapeHtml(post.slug)}/" aria-label="Read ${escapeHtml(post.title)}"><img src="assets/images/new/680818044_122107018856735434_4454822386258834117_n.webp" alt="" width="1440" height="810" loading="lazy"></a>
   <div class="journal-card-body">
     <span class="blog-date"><time datetime="${escapeHtml(post.isoDate)}">${escapeHtml(post.date)}</time></span>
     <h3>${escapeHtml(post.title)}</h3>
     <p>${escapeHtml(post.excerpt)}</p>
-    <a class="link" href="blog/${escapeHtml(post.slug)}.html">Read article <span aria-hidden="true">→</span></a>
+    <a class="link" href="blog/${escapeHtml(post.slug)}/">Read article <span aria-hidden="true">→</span></a>
   </div>
 </article>`,
     )
     .join("\n");
-  const indexPath = path.join(ROOT, "blog.html");
+  const indexPath = path.join(BLOG_DIR, "index.html");
   const index = fs.readFileSync(indexPath, "utf8");
   const start = "<!-- POSTS_START -->";
   const end = "<!-- POSTS_END -->";
   if (!index.includes(start) || !index.includes(end))
-    throw new Error("POSTS markers are missing from blog.html");
+    throw new Error("POSTS markers are missing from blog/index.html");
   fs.writeFileSync(
     indexPath,
     index.replace(
@@ -121,14 +121,14 @@ function syncIndex() {
 
 function generateSitemap(posts) {
   const today = new Date().toISOString().slice(0, 10);
-  const pages = ["", "/gallery.html", "/about.html", "/blog.html"];
+  const pages = ["", "/gallery/", "/sessions/", "/about/", "/blog/"];
   const urls = pages.map(
     (url, i) =>
       `  <url><loc>${BASE_URL}${url || "/"}</loc><lastmod>${today}</lastmod><priority>${i === 0 ? "1.0" : "0.8"}</priority></url>`,
   );
   posts.forEach((post) =>
     urls.push(
-      `  <url><loc>${BASE_URL}/blog/${escapeHtml(post.slug)}.html</loc><lastmod>${post.isoDate}</lastmod><priority>0.7</priority></url>`,
+      `  <url><loc>${BASE_URL}/blog/${escapeHtml(post.slug)}/</loc><lastmod>${post.isoDate}</lastmod><priority>0.7</priority></url>`,
     ),
   );
   fs.writeFileSync(
@@ -205,11 +205,13 @@ Return only valid JSON with title, date, isoDate, excerpt, slug, tags (array), c
     .replaceAll("{{POST_SLUG}}", escapeHtml(post.slug))
     .replace("{{POST_CONTENT}}", `${post.content}${sourcesHtml}`)
     .replace("{{POST_METADATA}}", metadata);
-  const destination = path.join(BLOG_DIR, `${post.slug}.html`);
+  const destinationDir = path.join(BLOG_DIR, post.slug);
+  fs.mkdirSync(destinationDir, { recursive: true });
+  const destination = path.join(destinationDir, "index.html");
   if (fs.existsSync(destination))
     throw new Error(`Post already exists: ${post.slug}`);
   fs.writeFileSync(destination, html);
-  console.log(`Created blog/${post.slug}.html`);
+  console.log(`Created blog/${post.slug}/`);
   syncIndex();
 }
 

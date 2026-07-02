@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://charlieakan.github.io/sna-photo-site/</loc><lastmod>2026-07-02</lastmod><priority>1.0</priority></url>
-  <url><loc>https://charlieakan.github.io/sna-photo-site/gallery.html</loc><lastmod>2026-07-02</lastmod><priority>0.8</priority></url>
-  <url><loc>https://charlieakan.github.io/sna-photo-site/about.html</loc><lastmod>2026-07-02</lastmod><priority>0.8</priority></url>
-  <url><loc>https://charlieakan.github.io/sna-photo-site/blog.html</loc><lastmod>2026-07-02</lastmod><priority>0.8</priority></url>
-  <url><loc>https://charlieakan.github.io/sna-photo-site/blog/how-to-prepare-your-dog-for-a-photo-session.html</loc><lastmod>2026-07-01</lastmod><priority>0.7</priority></url>
+  <url><loc>https://charlieakan.github.io/sna-photo-site/gallery/</loc><lastmod>2026-07-02</lastmod><priority>0.8</priority></url>
+  <url><loc>https://charlieakan.github.io/sna-photo-site/sessions/</loc><lastmod>2026-07-02</lastmod><priority>0.8</priority></url>
+  <url><loc>https://charlieakan.github.io/sna-photo-site/about/</loc><lastmod>2026-07-02</lastmod><priority>0.8</priority></url>
+  <url><loc>https://charlieakan.github.io/sna-photo-site/blog/</loc><lastmod>2026-07-02</lastmod><priority>0.8</priority></url>
+  <url><loc>https://charlieakan.github.io/sna-photo-site/blog/how-to-prepare-your-dog-for-a-photo-session/</loc><lastmod>2026-07-01</lastmod><priority>0.7</priority></url>
 </urlset>

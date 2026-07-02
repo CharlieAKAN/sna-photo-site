@@ -30,6 +30,10 @@ main {
   color: #30243e;
 }
 
+.sage .quote {
+  color: #fff;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -175,6 +179,41 @@ main {
   background-color: transparent;
 }
 
+.about-family-portrait {
+  position: relative;
+  margin: clamp(3rem, 6vw, 5rem) 0 0;
+  isolation: isolate;
+}
+
+.about-family-portrait::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 7% -2% -5% 2%;
+  border-radius: 48% 52% 46% 54%;
+  background:
+    radial-gradient(circle at 24% 34%, rgba(76, 138, 222, 0.25), transparent 43%),
+    radial-gradient(circle at 77% 66%, rgba(223, 75, 139, 0.23), transparent 46%),
+    rgba(240, 151, 70, 0.12);
+  filter: blur(24px);
+}
+
+.about-family-portrait img {
+  height: auto;
+  aspect-ratio: 1500 / 844;
+  border-radius: 9rem 9rem 1.4rem 1.4rem;
+  box-shadow: 0 28px 70px rgba(39, 48, 78, 0.2);
+}
+
+.about-family-portrait figcaption {
+  margin-top: 1rem;
+  color: rgba(45, 37, 56, 0.68);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 .cinema-grid {
   /* Let the page-wide color field show through the photo gutters so the
      gallery and the following story section remain one continuous canvas. */
@@ -192,6 +231,15 @@ main {
 .split-image {
   outline: 1px solid rgba(183, 100, 144, 0.15);
   outline-offset: 7px;
+}
+
+.split-image--arched {
+  border-radius: 9rem 9rem 1.4rem 1.4rem;
+  box-shadow: 0 28px 70px rgba(39, 48, 78, 0.2);
+}
+
+.split-image--arched img {
+  border-radius: inherit;
 }
 
 .testimonial-section {
@@ -400,6 +448,14 @@ main {
   }
 
   .testimonial-artwork img {
+    border-radius: 7rem 7rem 1.2rem 1.2rem;
+  }
+
+  .about-family-portrait img {
+    border-radius: 4.5rem 4.5rem 1.2rem 1.2rem;
+  }
+
+  .split-image--arched {
     border-radius: 7rem 7rem 1.2rem 1.2rem;
   }
 

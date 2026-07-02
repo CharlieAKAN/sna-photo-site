@@ -5,7 +5,7 @@
   display: none;
 }
 .split-image img[src*="674548343_"] {
-  object-position: left center;
+  object-position: 22% center;
 }
 .split-image img[src*="686116542_"] {
   object-position: 20% center;
@@ -40,6 +40,6 @@
     object-position: 35% center;
   }
   .split-image img[src*="674548343_"] {
-    object-position: 15% center;
+    object-position: 22% center;
   }
 }
