@@ -100,12 +100,16 @@
     min-height: 60svh;
   }
   .article-layout {
-    grid-template-columns: 1fr;
+    display: block;
   }
   .article-aside {
-    position: static;
+    position: static !important;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
   }
   .post-content {
+    position: relative;
+    clear: both;
     font-size: 1rem;
   }
 }
