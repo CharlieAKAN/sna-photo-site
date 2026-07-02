@@ -17,7 +17,7 @@
 .blog-grid .blog-card:first-child {
   grid-column: 1/-1;
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
   min-height: 520px;
 }
 .blog-grid .journal-card-image {
@@ -42,6 +42,7 @@
   flex-direction: column;
   align-items: flex-start;
   flex: 1;
+  min-width: 0;
 }
 .blog-card:first-child .journal-card-body {
   padding: clamp(2.2rem, 5vw, 4.5rem);
@@ -54,6 +55,7 @@
 .blog-card:first-child h3 {
   font-size: clamp(2.5rem, 4.5vw, 4.6rem);
   max-width: 590px;
+  overflow-wrap: anywhere;
 }
 .blog-card p {
   margin: 0 0 1.5rem;
